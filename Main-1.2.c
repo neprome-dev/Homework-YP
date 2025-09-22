@@ -32,12 +32,19 @@ double diff(const double a, const double b);
 double multiply(const double a, const double b);
 
 /*
-* @brief Высчитывает частное полученных чисел
+* @brief Высчитывает частное полученных чисел (a делится на b)
 * @param a - первое полученное число
 * @param b - второе полученное число
 * @return частное введенных двух чисел
 */
 double divide_ab(const double a, const double b);
+
+/*
+* @brief Высчитывает частное полученных чисел (b делится на a)
+* @param a - первое полученное число
+* @param b - второе полученное число
+* @return частное введенных двух чисел
+*/
 double divide_ba(const double a, const double b);
 
 /*
