@@ -32,20 +32,12 @@ double diff(const double a, const double b);
 double multiply(const double a, const double b);
 
 /*
-* @brief Высчитывает частное полученных чисел (a делится на b)
+* @brief Высчитывает частное полученных чисел
 * @param a - первое полученное число
 * @param b - второе полученное число
 * @return частное введенных двух чисел
 */
-double divide_ab(const double a, const double b);
-
-/*
-* @brief Высчитывает частное полученных чисел (b делится на a)
-* @param a - первое полученное число
-* @param b - второе полученное число
-* @return частное введенных двух чисел
-*/
-double divide_ba(const double a, const double b);
+double divide(const double a, const double b);
 
 /*
 * @brief Точка входа в программу
@@ -63,45 +55,34 @@ int main(void)
 	printf("|A-B| = %.2f\n", difference);
 	const double proizvedenie = multiply(a, b);
 	printf("A*B = %.2f\n", proizvedenie);
-	const double div_ab = divide_ab(a, b);
-	printf("A/B = %.2f\n", div_ab);
-	const double div_ba = divide_ba(a, b);
-	printf("B/A = %.2f\n\n\n\n", div_ba);
+	const double div = divide(a, b);
+	printf("A/B = %.2f\n", div);
 	return 0;
 }
 
 double read(void)
 {
-	double num;
+	double num = 0;
 	scanf_s("%lf", &num);
 	return num;
 }
 
 double sum(const double a, const double b)
 {
-	double summa = a + b;
-	return summa;
+	return a + b;
 }
 
 double diff(const double a, const double b)
 {
-	double difference = fabs(a - b);
-	return difference;
+	return a - b;
 }
 
 double multiply(const double a, const double b)
 {
-	double proizvedenie = a * b;
-	return proizvedenie;
+	return a * b;
 }
 
-double divide_ab(const double a, const double b)
+double divide(const double a, const double b)
 {
-	double div = a / b;
-	return div;
-}
-double divide_ba(const double a, const double b)
-{
-	double div = b / a;
-	return div;
+	return a / b;
 }
