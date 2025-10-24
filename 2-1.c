@@ -63,8 +63,12 @@ int main(void)
 double read(void)
 {
 	double num = 0;
-	scanf_s("%lf", &num);
-	return num;
+    if (scanf_s("%lf", &num) != 1) 
+	{
+        printf("Ошибка ввода!\n");
+        exit(1);
+    }
+    return num;
 }
 
 double sum(const double a, const double b)
@@ -84,5 +88,9 @@ double multiply(const double a, const double b)
 
 double divide(const double a, const double b)
 {
-	return a / b;
+    if (b == 0.0) {
+        printf("На ноль делить нельзя!\n");
+        exit(1);
+    }
+    return a / b;
 }
