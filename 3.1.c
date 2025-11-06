@@ -17,27 +17,27 @@ double Input(void);
 * @param finish_x конечное значение интервала.
 * @return Возвращает ошибку если интервал задан неверно.
 */
-void   CheckInterval(double a, double b);
+void   CheckInterval(const double a, const double b);
 
 /*
 * @brief Проверяет корректность заданного шага.
 * @param step_x значение шага.
 * @return Возвращает ошибку если шаг задан неверно.
 */
-void   CheckStep(double dx);
+void   CheckStep(const double dx);
 
 /*
 * @brief проверяет x > 0, т.к log(x) принимает значения только при x > 0
 * @param x - конкретное значение x в данном шаге
 */
-bool   CanCompute(double x);     
+bool   CanCompute(const double x);     
 
 /*
 * @brief Считает нашу функцию.
 * @param x - значение параметра.
 * @return Значение функции.
 */
-double Func(double x);         
+double Func(const double x);         
 /*
 * @brief Точка входа в программу.
 * @return Возвращает значение функции с заданным в цикле корнем.
@@ -78,7 +78,7 @@ double Input(void)
     return num;
 }
 
-void CheckInterval(double a, double b) {
+void CheckInterval(const double a, const double b) {
     if (b - a < -DBL_EPSILON)
     { 
         printf("Конечное значение должно быть больше начального"); 
@@ -86,7 +86,7 @@ void CheckInterval(double a, double b) {
     }
 }
 
-void CheckStep(double dx)
+void CheckStep(const double dx)
 {
     if (dx <= DBL_EPSILON)
     {
@@ -95,13 +95,12 @@ void CheckStep(double dx)
     }
 }
 
-bool CanCompute(double x)
+bool CanCompute(const double x)
 {
     return x > DBL_EPSILON;
 }
 
-double Func(double x)
+double Func(const double x)
 {
-    const double lx = log(x);  
-    return sin(lx) - cos(lx) + 2 * lx;
+    return sin(log(x)) - cos(log(x)) + 2 * log(x);
 }
