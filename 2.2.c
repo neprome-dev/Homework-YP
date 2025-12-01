@@ -1,8 +1,9 @@
-#include <stdio.h>
+#define _USE_MATH_DEFINES#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 #include <stdbool.h>
+
 
 /**
  * @brief is_zero проверяет, является ли число нулём
@@ -52,7 +53,7 @@ bool is_define(const double x);
  * @return возвращает 0 в случае успеха
  */
 int main(void) {
-	double a = 1.65;
+	const double a = 1.65;
 
 	puts("Enter the x:");
 
@@ -85,7 +86,7 @@ double first_operation(const double x) {
 		exit(1);
 	}
 
-	return 3.14 * pow(x, 2) - 7 / pow(x, 2);
+	return M_PI * pow(x, 2) - 7 / pow(x, 2);
 }
 
 double second_operation(const double x, const double a) {
@@ -99,9 +100,6 @@ double get_y(const double x, const double a) {
 	else if (x >= 1.4 - DBL_EPSILON) {
 		return second_operation(x, a);
 	}
-	
-	fprintf(stderr, "x is in undefined interval [1.34, 1.4)\n");
-	exit(EXIT_FAILURE);
 }
 
 bool is_define(const double x) {
