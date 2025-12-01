@@ -111,4 +111,3 @@ bool is_define(const double x) {
 bool is_zero(const double number) {
 	return number < DBL_EPSILON;
 }
-}
