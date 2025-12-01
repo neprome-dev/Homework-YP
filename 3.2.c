@@ -64,11 +64,11 @@ int main(void)
     puts("Enter e:");
     double e = finput();
 
-    double s_n  = get_summ(n);
-    double s_e  = get_summ_e(e);
+    double sum_first_n_terms  = get_summ(n);
+    double sum_above_threshold  = get_summ_e(sum_above_threshold);
 
-    printf("Sum of first n terms: %lf\n", s_n);
-    printf("Sum of terms with |a_k| >= e: %lf\n", s_e);
+    printf("Sum of first n terms: %lf\n", sum_first_n_terms);
+    printf("Sum of terms with |a_k| >= e: %lf\n", sum_above_threshold);
 
     return 0;
 }
@@ -115,8 +115,8 @@ int dinput(void)
 
     if (scanf_s("%d", &number) != 1 || !is_positive(number))
     {
-        puts("Your input is uncorrected");
-        exit(EXIT_FAILURE);
+		printf(stderr, "Your input is uncorrected");
+		exit(1);
     }
 
     return number;
@@ -128,8 +128,8 @@ double finput(void)
 
     if (scanf_s("%lf", &number) != 1 || !is_positive_d(number))
     {
-        puts("Your input is uncorrected");
-        exit(EXIT_FAILURE);
+		printf(stderr, "Your input is uncorrected");
+		exit(1);
     }
 
     return number;
