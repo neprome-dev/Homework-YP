@@ -78,7 +78,7 @@ double get_summ(const int n)
     double last_element = -1.0;
     double summ = last_element;
 
-    for (int k = 2; k <= n; ++k)
+    for (int k = 1; k < n; ++k)
     {
         last_element = get_next_element(last_element, k);
         summ += last_element;
@@ -89,7 +89,7 @@ double get_summ(const int n)
 
 double get_next_element(const double last_element, const int k)
 {
-    return last_element / (-pow(k, 2));
+	return last_element / (-pow((double)k, 2));
 }
 
 double get_summ_e(const double e)
@@ -97,7 +97,7 @@ double get_summ_e(const double e)
     double summ_e = 0.0;
 
     double last_element = -1.0; 
-    int k = 2;
+    int k = 1;
 	
     while (fabs(last_element) >= e)
     {
