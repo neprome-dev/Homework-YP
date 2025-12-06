@@ -5,19 +5,6 @@
 #include <stdbool.h>
 
 /**
-* @brief Проверяет, что значение положительное
-* @param value значение для проверки
-* @return true, если значение > 0, false иначе
-*/
-bool isPositive(const double value);
-
-/**
-* @brief Считывает значение с клавиатуры с проверкой
-* @return Считанное значение
-*/
-double finput(void);
-
-/**
 * @brief Вычисляет cos(x) с использованием встроенной функции
 * @param x значение аргумента
 * @return Значение cos(x)
@@ -59,23 +46,6 @@ int main(void)
 	}
   
 	return 0;
-}
-
-double finput(void)
-{
-	double number = 0;
-
-	if (scanf_s("%lf", &number) != 1) {
-		fprintf(stderr, "Некорректный ввод\n");
-		exit(1);
-	}
-
-	return number;
-}
-
-bool isPositive(const double value)
-{
-	return value > 0;
 }
 
 double functionCos(const double x)
