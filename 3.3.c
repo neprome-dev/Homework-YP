@@ -2,30 +2,54 @@
 #include <math.h>
 #include <stdlib.h>
 #include <float.h>
-#include <stdbool.h>
 
 /**
-* @brief Вычисляет cos(x) с использованием встроенной функции
-* @param x значение аргумента
-* @return Значение cos(x)
+* @brief Вычисляет значение функции в точке
+* @param x точка
+* @return Вычисленное значение
 */
-double functionCos(const double x);
+double function(const double x);
 
 /**
 * @brief Вычисляет сумму ряда с заданной точностью
-* @param x значение аргумента
-* @return Сумма ряда для cos(x)
+* @param e точность расчета
+* @param x значение параметра x
+* @return Вычисленное значение суммы
 */
-double getSumSeries(const double x);
+double defSummE(const double e, const double x);
 
 /**
-* @brief Вычисляет следующий элемент ряда по рекуррентной формуле
-* @param n номер текущего элемента
-* @param x значение аргумента
-* @param prevElement предыдущий элемент ряда
-* @return Следующий элемент ряда
+* @brief Считывает значение с клавиатуры с проверкой ввода
+* @return Считанное значение
 */
-double getNextElement(const int n, const double x, const double prevElement);
+double defValid(void);
+
+/**
+* @brief Вычисляет коэффициент рекуррентного выражения
+* @param n текущий номер члена
+* @param x значение параметра x
+* @return Коэффициент для рекуррентной формулы
+*/
+double getRecurent(const int n, const double x);
+
+/**
+* @brief Проверяет, что число положительно
+* @param input проверяемое значение
+*/
+void CheckValue(const double input);
+
+/**
+* @brief Проверяет корректность интервала
+* @param start начало интервала
+* @param end конец интервала
+*/
+void checkEndStart(const double start, const double end);
+
+/**
+* @brief Проверяет, что шаг положительный
+* @param step значение шага
+*/
+void checkStep(const double step);
 
 /**
 * @brief Точка входа в программу
@@ -35,41 +59,87 @@ int main(void)
 {
 	system("chcp 1251");
 
-	printf("%-15s%-20s%-20s\n", "x", "cos(x)", "S(x)");
-	printf("%-15s%-20s%-20s\n", "-----", "--------", "--------");
-	double x = 0.1;
-	double end = 1.0;
-	double step = 0.1;
+	printf("Введите число e: ");
+	double e = defValid();
+	CheckValue(e);
 
-	for (x; x <= end + DBL_EPSILON; x += step) {
-		printf("%-15.4lf%-20.6lf%-20.6lf\n", x, functionCos(x), getSumSeries(x));
+	printf("Введите начальное значение: ");
+	double start = defValid();
+	printf("Введите конечное значение: ");
+	double end = defValid();
+	checkEndStart(start, end);
+
+	printf("Введите шаг: ");
+	double step = defValid();
+	checkStep(step);
+
+	printf("%-10s%-25s%-10s\n", "x", "f(x)", "Summ(x)");
+	for (double x = start; x <= end + DBL_EPSILON; x += step)
+	{
+		{
+			printf("%-10.2lf%-25.6lf%-10.6lf\n", x, function(x), defSummE(e, x));
+		}
 	}
-  
+
 	return 0;
 }
 
-double functionCos(const double x)
+double function(const double x)
 {
 	return cos(x);
 }
 
-double getSumSeries(const double x)
+double defValid(void)
 {
-	double sum = 1.0;
-	double element = 1.0;
-	double E = 1e-4;
-	int n = 1;
-
-	while (fabs(element) > E) {
-		element = getNextElement(n, x, element);
-		sum += element;
-		n++;
+	double valid = 0;
+	if (!scanf_s("%lf", &valid))
+	{
+		printf("Error\n");
+		exit(1);
 	}
-
-	return sum;
+	return valid;
 }
 
-double getNextElement(const int n, const double x, const double prevElement)
+void CheckValue(const double input)
 {
-	return prevElement * (-x * x) / ((2 * n - 1) * (2 * n));
+	if (!(input > 0))
+	{
+		printf("Error\n");
+		exit(1);
+	}
+}
+
+double defSummE(const double e, const double x)
+{
+	double current = 1.0;
+	double result = 0;
+	for (int n = 1; fabs(current) > e; n++)
+	{
+		result += current;
+		current *= getRecurent(n, x);
+	}
+	return result;
+}
+
+void checkEndStart(const double start, const double end)
+{
+	if (!(start < end))
+	{
+		printf("Error\n Значения не должны совпадать или значение начала не может быть больше значения конца\n");
+		exit(1);
+	}
+}
+
+void checkStep(const double step)
+{
+	if (step <= DBL_EPSILON)
+	{
+		printf("Error\n Шаг должен быть больше 0\n");
+		exit(1);
+	}
+}
+
+double getRecurent(const int n, const double x)
+{
+	return (-x * x) / ((2 * n - 1) * (2 * n));
 }
