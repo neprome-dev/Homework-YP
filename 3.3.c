@@ -57,89 +57,89 @@ void checkStep(const double step);
 */
 int main(void)
 {
-	system("chcp 1251");
+ system("chcp 1251");
 
-	printf("Введите число e: ");
-	double e = defValid();
-	CheckValue(e);
+ printf("Введите число e: ");
+ double e = defValid();
+ CheckValue(e);
 
-	printf("Введите начальное значение: ");
-	double start = defValid();
-	printf("Введите конечное значение: ");
-	double end = defValid();
-	checkEndStart(start, end);
+ printf("Введите начальное значение: ");
+ double start = defValid();
+ printf("Введите конечное значение: ");
+ double end = defValid();
+ checkEndStart(start, end);
 
-	printf("Введите шаг: ");
-	double step = defValid();
-	checkStep(step);
+ printf("Введите шаг: ");
+ double step = defValid();
+ checkStep(step);
 
-	printf("%-10s%-25s%-10s\n", "x", "f(x)", "Summ(x)");
-	for (double x = start; x <= end + DBL_EPSILON; x += step)
-	{
-		{
-			printf("%-10.2lf%-25.6lf%-10.6lf\n", x, function(x), defSummE(e, x));
-		}
-	}
+ printf("%-10s%-25s%-10s\n", "x", "f(x)", "Summ(x)");
+ for (double x = start; x <= end + DBL_EPSILON; x += step)
+ {
+  {
+   printf("%-10.2lf%-25.6lf%-10.6lf\n", x, function(x), defSummE(e, x));
+  }
+ }
 
-	return 0;
+ return 0;
 }
 
 double function(const double x)
 {
-	return cos(x);
+ return cos(x);
 }
 
 double defValid(void)
 {
-	double valid = 0;
-	if (!scanf_s("%lf", &valid))
-	{
-		printf("Error\n");
-		exit(1);
-	}
-	return valid;
+ double valid = 0;
+ if (!scanf_s("%lf", &valid))
+ {
+  printf("Error\n");
+  exit(1);
+ }
+ return valid;
 }
 
 void CheckValue(const double input)
 {
-	if (!(input > 0))
-	{
-		printf("Error\n");
-		exit(1);
-	}
+ if (!(input > DBL_EPSILON))
+ {
+  printf("Error\n");
+  exit(1);
+ }
 }
 
 double defSummE(const double e, const double x)
 {
-	double current = 1.0;
-	double result = 0;
-	for (int n = 1; fabs(current) > e; n++)
-	{
-		result += current;
-		current *= getRecurent(n, x);
-	}
-	return result;
+ double current = 1.0;
+ double result = 0;
+ for (int n = 1; fabs(current) > e; n++)
+ {
+  result += current;
+  current *= getRecurent(n, x);
+ }
+ return result;
 }
 
 void checkEndStart(const double start, const double end)
 {
-	if (!(start < end))
-	{
-		printf("Error\n Значения не должны совпадать или значение начала не может быть больше значения конца\n");
-		exit(1);
-	}
+ if (!(fabs(start - end) < DBL_EPSILON)
+ {
+  printf("Error\n Значения не должны совпадать или значение начала не может быть больше значения конца\n");
+  exit(1);
+ }
 }
 
 void checkStep(const double step)
 {
-	if (step <= DBL_EPSILON)
-	{
-		printf("Error\n Шаг должен быть больше 0\n");
-		exit(1);
-	}
+ if (step < DBL_EPSILON)
+ {
+  printf("Error\n Шаг должен быть больше 0\n");
+  exit(1);
+ }
 }
 
 double getRecurent(const int n, const double x)
 {
-	return (-x * x) / ((2 * n - 1) * (2 * n));
+ return (-x * x) / ((2 * n - 1) * (2 * n));
 }
