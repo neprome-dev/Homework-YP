@@ -189,7 +189,9 @@ int main(void)
 		printf("\nМассив после удаления:\n");
 		defPrintArr(newArr, newSize);
 		free(newArr);
-		break;
+		free(copyD);
+		free(D);
+		return 0;
 	}
 
 	case 3:
@@ -198,7 +200,9 @@ int main(void)
 		printf("\nМассив A:\n");
 		defPrintArr(A, (size_t)n);
 		free(A);
-		break;
+		free(copyD);
+		free(D);
+		return 0;
 	}
 
 	default:
@@ -206,12 +210,11 @@ int main(void)
 		free(D);
 		free(copyD);
 		return 1;
+
+		free(D);
+		free(copyD);
+		return 0;
 	}
-
-	free(D);
-	free(copyD);
-
-	return 0;
 }
 
 int getValid(void)
@@ -359,7 +362,7 @@ size_t countAfterDelete(const int* arr, const size_t size, const int a, const in
 
 	for (size_t i = 0; i < size; i++)
 	{
-		if (!(arr[i] % 7 == 0 && i >= (size_t)a && i <= (size_t)b))
+		if (!(arr[i] % 7 == 0 && arr[i] >= a && arr[i] <= b))
 			count++;
 	}
 
@@ -377,7 +380,7 @@ int* defForTask2(const int* arr, const size_t size, const int a, const int b)
 	size_t j = 0;
 	for (size_t i = 0; i < size; i++)
 	{
-		if (!(arr[i] % 7 == 0 && i >= (size_t)a && i <= (size_t)b))
+		if (!(arr[i] % 7 == 0 && arr[i] >= a && arr[i] <= b))
 		{
 			newArr[j++] = arr[i];
 		}
