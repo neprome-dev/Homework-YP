@@ -4,12 +4,19 @@
 #include <stdbool.h>
 
 enum { CHOICE_MANUAL = 1, CHOICE_RANDOM = 2 };
+enum { TASK1 = 1, TASK2 = 2, TASK3 = 3 };
 
 /**
-* @brief Считывает значение с клавиатуры с проверкой ввода
+* @brief Считывает значение с клавиатуры с проверкой ввода (для size_t)
 * @return Считанное значение
 */
-int getValid(void);
+size_t getValid(void);
+
+/**
+* @brief Считывает значение с клавиатуры с проверкой ввода (для int)
+* @return Считанное значение
+*/
+int getValidInt(void);
 
 /**
 * @brief Проверяет, что число не меньше 1
@@ -72,22 +79,6 @@ int* defcopyArr(const int* arr, const size_t size);
 void checkPointer(const int* arr);
 
 /**
-* @brief Находит максимальный элемент
-* @param arr массив
-* @param size размер
-* @return Максимум
-*/
-int defMAXX(const int* arr, const size_t size);
-
-/**
-* @brief Находит минимальный элемент
-* @param arr массив
-* @param size размер
-* @return Минимум
-*/
-int defMINN(const int* arr, const size_t size);
-
-/**
 * @brief Заменяет первый отрицательный на первый положительный
 * @param arr массив
 * @param size размер
@@ -131,8 +122,8 @@ int main(void)
 	system("chcp 1251");
 
 	printf("Введите размер массива: ");
-	int n = getValid();
-	checkValueForN(n);
+	size_t n = getValid();
+	checkValueForN((int)n);
 
 	int* D = (int*)malloc(sizeof(int) * n);
 	checkPointer(D);
@@ -167,18 +158,18 @@ int main(void)
 	int* copyD = defcopyArr(D, (size_t)n);
 	checkPointer(copyD);
 
-	printf("\nКакие преобразования?\n%d - Заменить первый отрицательный на первый положительный\n%d - Удалить элементы кратные 7 из [a;b]\n%d - Сформировать массив A по формуле\n", 1, 2, 3);
+	printf("\nКакие преобразования?\n%d - Заменить первый отрицательный на первый положительный\n%d - Удалить элементы кратные 7 из [a;b]\n%d - Сформировать массив A по формуле\n", TASK1, TASK2, TASK3);
 	int taskChoice = getValid();
 
 	switch (taskChoice)
 	{
-	case 1:
+	case TASK1:
 		defForTask1(copyD, (size_t)n);
 		printf("\nМассив после замены:\n");
 		defPrintArr(copyD, (size_t)n);
 		break;
 
-	case 2:
+	case TASK2:
 	{
 		printf("Введите a: ");
 		int a = getValid();
@@ -189,20 +180,16 @@ int main(void)
 		printf("\nМассив после удаления:\n");
 		defPrintArr(newArr, newSize);
 		free(newArr);
-		free(copyD);
-		free(D);
-		return 0;
+		break;
 	}
 
-	case 3:
+	case TASK3:
 	{
 		int* A = defForTask3(copyD, (size_t)n);
 		printf("\nМассив A:\n");
 		defPrintArr(A, (size_t)n);
 		free(A);
-		free(copyD);
-		free(D);
-		return 0;
+		break;
 	}
 
 	default:
@@ -210,14 +197,29 @@ int main(void)
 		free(D);
 		free(copyD);
 		return 1;
-
-		free(D);
-		free(copyD);
-		return 0;
 	}
+	free(D);
+	free(copyD);
+
 }
 
-int getValid(void)
+size_t getValid(void)
+{
+	int valid = 0;
+	if (!scanf_s("%d", &valid))
+	{
+		fprintf(stderr, "Разрешен ввод только чисел\n");
+		exit(1);
+	}
+	if (valid < 1)
+	{
+		fprintf(stderr, "Размер должен быть больше или равен 1\n");
+		exit(1);
+	}
+	return (size_t)valid;
+}
+
+int getValidInt(void)
 {
 	int valid = 0;
 	if (!scanf_s("%d", &valid))
@@ -307,30 +309,6 @@ void checkPointer(const int* arr)
 		fprintf(stderr, "Ошибка памяти\n");
 		exit(1);
 	}
-}
-
-int defMAXX(const int* arr, const size_t size)
-{
-	checkPointer(arr);
-	int max = arr[0];
-	for (size_t i = 0; i < size; i++)
-	{
-		if (arr[i] > max)
-			max = arr[i];
-	}
-	return max;
-}
-
-int defMINN(const int* arr, const size_t size)
-{
-	checkPointer(arr);
-	int min = arr[0];
-	for (size_t i = 0; i < size; i++)
-	{
-		if (arr[i] < min)
-			min = arr[i];
-	}
-	return min;
 }
 
 void defForTask1(int* arr, const size_t size)
