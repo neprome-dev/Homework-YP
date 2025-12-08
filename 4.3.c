@@ -175,7 +175,9 @@ int main(void)
 		defTaskOne(copyArray, n, m);
 		printf("\nМассив после замены:\n");
 		printArrays(copyArray, n, m);
-		break;
+		freeMemory(mainArray, n);
+		freeMemory(copyArray, n);
+		return 0;
 
 	case TASK_TWO:
 	{
@@ -183,7 +185,9 @@ int main(void)
 		printf("\nМассив после удаления:\n");
 		printArrays(copyArray, newN, m);
 		printf("\nУдалено %zu строк\n", n - newN);
-		break;
+		freeMemory(mainArray, n);
+		freeMemory(copyArray, n);
+		return 0;
 	}
 
 	default:
@@ -192,11 +196,6 @@ int main(void)
 		freeMemory(copyArray, n);
 		exit(1);
 	}
-
-	freeMemory(mainArray, n);
-	freeMemory(copyArray, n);
-
-	return 0;
 }
 
 int getValid(void)
