@@ -117,9 +117,9 @@ int main(void)
 
 	printf("Введите диапазон, в котором будут задаваться числа массива:\n");
 	printf("Минимум: ");
-	int min = getValid();
+	const int min = getValid();
 	printf("Максимум: ");
-	int max = getValid();
+	const int max = getValid();
 	defCheckMinMax(min, max);
 	printf("Числа массива будут задаваться в диапазоне [%d, %d]\n\n", min, max);
 
