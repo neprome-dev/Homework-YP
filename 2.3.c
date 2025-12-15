@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <float.h>
 
 /**
 * @brief Считывает значение, введённое с клавиатуры, с проверкой ввода
