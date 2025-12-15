@@ -54,7 +54,7 @@ int main(void)
 	double sum = getHalfSum(x, y);
 	double product = getDoubleProduct(x, y);
 
-	if (x < y) {
+	if (x < y - DBL_EPSILON) {
 		x = sum;
 		y = product;
 	} else {
@@ -80,7 +80,8 @@ double defValid(void)
 
 bool isNotEqual(const double x, const double y)
 {
-	return x != y;
+	double diff = x > y ? x - y : y - x;
+	return diff > DBL_EPSILON;
 }
 
 double getHalfSum(const double x, const double y)
