@@ -1,79 +1,62 @@
-#include "Rectangle.h"
+#pragma once
 
-/*
-* @brief Конструктор без параметров
-*/
-Rectangle::Rectangle()
+#include "Point.h"
+
+/**
+ * @brief Класс для работы с прямоугольником на плоскости.
+ */
+class Rectangle
 {
-    x1 = 0;
-    y1 = 0;
-    x2 = 0;
-    y2 = 0;
-    x3 = 0;
-    y3 = 0;
-    x4 = 0;
-    y4 = 0;
-}
+private:
+    Point p1;
+    Point p2;
+    Point p3;
+    Point p4;
 
-/*
-* @brief Конструктор с параметрами
-* @param a1 - x первой точки
-* @param b1 - y первой точки
-* @param a2 - x второй точки
-* @param b2 - y второй точки
-* @param a3 - x третьей точки
-* @param b3 - y третьей точки
-* @param a4 - x четвертой точки
-* @param b4 - y четвертой точки
-*/
-Rectangle::Rectangle(double a1, double b1, double a2, double b2,
-    double a3, double b3, double a4, double b4)
-{
-    x1 = a1;
-    y1 = b1;
-    x2 = a2;
-    y2 = b2;
-    x3 = a3;
-    y3 = b3;
-    x4 = a4;
-    y4 = b4;
-}
+    /**
+     * @brief Вычисляет длину стороны между двумя точками.
+     * @param first - первая точка.
+     * @param second - вторая точка.
+     * @return Длина отрезка между точками.
+     */
+    double getSideLength(const Point& first, const Point& second) const;
 
-/*
-* @brief Выводит координаты точек прямоугольника
-*/
-void Rectangle::Show()
-{
-    cout << "Point 1: " << x1 << " " << y1 << endl;
-    cout << "Point 2: " << x2 << " " << y2 << endl;
-    cout << "Point 3: " << x3 << " " << y3 << endl;
-    cout << "Point 4: " << x4 << " " << y4 << endl;
-}
+    /**
+     * @brief Проверяет, что точки задают прямоугольник.
+     * @return true, если точки задают прямоугольник, иначе false.
+     */
+    bool isRectangle() const;
 
-/*
-* @brief Вычисляет периметр прямоугольника
-* @return Периметр прямоугольника
-*/
-double Rectangle::Perimeter()
-{
-    double a, b;
+public:
+    /**
+     * @brief Конструктор без параметров.
+     */
+    Rectangle();
 
-    a = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    b = sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+    /**
+     * @brief Конструктор с параметрами.
+     * @param point1 - первая точка прямоугольника.
+     * @param point2 - вторая точка прямоугольника.
+     * @param point3 - третья точка прямоугольника.
+     * @param point4 - четвертая точка прямоугольника.
+     */
+    Rectangle(const Point& point1, const Point& point2,
+              const Point& point3, const Point& point4);
 
-    return 2 * (a + b);
-}
+    /**
+     * @brief Выводит координаты точек прямоугольника.
+     */
+    void Show() const;
 
-/*
-* @brief Вычисляет площадь прямоугольника
-* @return Площадь прямоугольника
-*/
-double Rectangle::Area()
-{
-    double a, b;
+    /**
+     * @brief Вычисляет периметр прямоугольника.
+     * @return Периметр прямоугольника.
+     */
+    double Perimeter() const;
 
-    a = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    b = sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-
-    return a * b;
-}
+    /**
+     * @brief Вычисляет площадь прямоугольника.
+     * @return Площадь прямоугольника.
+     */
+    double Area() const;
+};
