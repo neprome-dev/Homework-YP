@@ -36,7 +36,7 @@ double Rectangle::getSideLength(const Point& first, const Point& second) const
 
 bool Rectangle::isRectangle() const
 {
-    const double eps = 1e-9;
+    const double eps = DBL_EPSILON;
 
     const double abX = p2.getX() - p1.getX();
     const double abY = p2.getY() - p1.getY();
