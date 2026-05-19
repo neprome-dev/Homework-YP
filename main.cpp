@@ -4,34 +4,20 @@
 #include "Point.h"
 #include "Rectangle.h"
 
-bool InputPoint(Point& point)
-{
-    double x;
-    double y;
-
-    if (!(std::cin >> x >> y))
-    {
-        return false;
-    }
-
-    point = Point(x, y);
-    return true;
-}
+/**
+ * @brief Считывает координаты точки из стандартного ввода.
+ * @return Точка с введёнными координатами.
+ */
+Point InputPoint();
 
 int main()
 {
-    Point p1;
-    Point p2;
-    Point p3;
-    Point p4;
-
     std::cout << "Введите координаты 4 точек прямоугольника:" << std::endl;
 
-    if (!InputPoint(p1) || !InputPoint(p2) || !InputPoint(p3) || !InputPoint(p4))
-    {
-        std::cout << "Ошибка ввода данных" << std::endl;
-        return 1;
-    }
+    const Point p1 = InputPoint();
+    const Point p2 = InputPoint();
+    const Point p3 = InputPoint();
+    const Point p4 = InputPoint();
 
     try
     {
@@ -49,4 +35,17 @@ int main()
     }
 
     return 0;
+}
+
+Point InputPoint()
+{
+    double x = 0.0;
+    double y = 0.0;
+
+    if (!(std::cin >> x >> y))
+    {
+        exit(1);
+    }
+
+    return Point(x, y);
 }
