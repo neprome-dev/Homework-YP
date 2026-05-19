@@ -6,7 +6,7 @@ Point::Point()
     y = 0.0;
 }
 
-Point::Point(double newX, double newY)
+Point::Point(const double newX, const double newY)
 {
     x = newX;
     y = newY;
