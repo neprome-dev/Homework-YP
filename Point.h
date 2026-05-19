@@ -20,7 +20,7 @@ public:
      * @param newX - координата точки по оси X.
      * @param newY - координата точки по оси Y.
      */
-    Point(double newX, double newY);
+    Point(const double newX, const double newY);
 
     /**
      * @brief Возвращает координату точки по оси X.
