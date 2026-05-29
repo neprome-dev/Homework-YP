@@ -1,4 +1,5 @@
 #include "../include/ClassPoint.h"
+#include "../include/ClassMathHelper.h"
 
 Point::Point(const double x, const double y)
 {
@@ -24,7 +25,7 @@ void Point::operator = (const Point& other)
 
 bool Point::operator == (const Point& other) const
 {
-	return (this->x == other.x && this->y == other.y);
+	return (MathHelper::isEqual(this->x, other.x) && MathHelper::isEqual(this->y, other.y));
 }
 
 bool Point::operator != (const Point& other) const
