@@ -13,19 +13,7 @@ using namespace std;
 * @brief Считывает число введённое с клавиатуры
 * @return Считанное значение
 */
-double getNumber()
-{
-	double number;
-	cin >> number;
-
-	if (cin.fail())
-	{
-		cerr << "Ошибка чтения" << endl;
-		exit(1);
-	}
-
-	return number;
-}
+double getNumber();
 
 /**
 * @brief Точка входа в программу
@@ -60,3 +48,18 @@ int main()
 
 	return 0;
 }
+
+double getNumber()
+{
+	double number = 0;
+	cin >> number;
+
+	if (cin.fail())
+	{
+		cerr << "Ошибка чтения" << endl;
+		exit(1);
+	}
+
+	return number;
+}
+
