@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ClassPoint.h"
-
+#include "ClassMathHelper.h"
 #include <iostream>
 
 using namespace std;
