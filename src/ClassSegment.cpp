@@ -1,4 +1,5 @@
 #include "../include/ClassSegment.h"
+#include "../include/ClassMathHelper.h"
 
 #include <iostream>
 
@@ -14,7 +15,7 @@ Segment::Segment(const Point left, const Point right)
 
 void Segment::checkSegment(void)
 {
-	if (left.getX() == right.getX())
+	if (MathHelper::isEqual(left.getX(), right.getX()))
 	{
 		cerr << "Error: Точки не образуют отрезок" << endl;
 		exit(1);
