@@ -19,11 +19,8 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_library(core
-"src/ClassPriorityDeque.cpp"
-)
-
-target_include_directories(core PUBLIC
+add_library(core INTERFACE)
+target_include_directories(core INTERFACE
 ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
@@ -38,10 +35,6 @@ core
 
 add_executable(tests
 test/tests.cpp
-)
-
-target_include_directories(tests PRIVATE
-${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(tests
