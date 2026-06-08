@@ -12,7 +12,7 @@ int main()
 	cout << "Вариант 10\n";
 	cout << "Очередь с приоритетом с двусторонним доступом\n\n";
 
-	PriorityDeque queue = { 5, 1, 9, 3, 7 };
+	PriorityDeque<int> queue = { 5, 1, 9, 3, 7 };
 
 	cout << "Исходная очередь: " << queue.toString() << '\n';
 	cout << "Минимальный приоритет: " << queue.getMin() << '\n';
