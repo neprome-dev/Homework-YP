@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <stdexcept>
 #include <utility>
 #include "../include/ClassPriorityDeque.h"
 
@@ -10,7 +9,7 @@ using namespace std;
 */
 TEST(PriorityDequeTest, Default_Constructor)
 {
-	PriorityDeque queue;
+	PriorityDeque<int> queue;
 
 	ASSERT_TRUE(queue.isEmpty());
 	ASSERT_EQ(queue.getSize(), 0);
@@ -22,7 +21,7 @@ TEST(PriorityDequeTest, Default_Constructor)
 */
 TEST(PriorityDequeTest, InitializerList_Constructor)
 {
-	PriorityDeque queue = { 5, 1, 4, 2, 3 };
+	PriorityDeque<int> queue = { 5, 1, 4, 2, 3 };
 
 	ASSERT_FALSE(queue.isEmpty());
 	ASSERT_EQ(queue.getSize(), 5);
@@ -34,7 +33,7 @@ TEST(PriorityDequeTest, InitializerList_Constructor)
 */
 TEST(PriorityDequeTest, Insert)
 {
-	PriorityDeque queue = { 4, 1, 7 };
+	PriorityDeque<int> queue = { 4, 1, 7 };
 
 	queue.insert(5);
 	queue.insert(0);
@@ -48,7 +47,7 @@ TEST(PriorityDequeTest, Insert)
 */
 TEST(PriorityDequeTest, Get_Min_And_Max)
 {
-	PriorityDeque queue = { 6, 2, 8, 1 };
+	PriorityDeque<int> queue = { 6, 2, 8, 1 };
 
 	ASSERT_EQ(queue.getMin(), 1);
 	ASSERT_EQ(queue.getMax(), 8);
@@ -59,7 +58,7 @@ TEST(PriorityDequeTest, Get_Min_And_Max)
 */
 TEST(PriorityDequeTest, Remove_Min)
 {
-	PriorityDeque queue = { 3, 1, 2 };
+	PriorityDeque<int> queue = { 3, 1, 2 };
 
 	ASSERT_EQ(queue.removeMin(), 1);
 	ASSERT_EQ(queue.toString(), "[2, 3]");
@@ -71,7 +70,7 @@ TEST(PriorityDequeTest, Remove_Min)
 */
 TEST(PriorityDequeTest, Remove_Max)
 {
-	PriorityDeque queue = { 3, 1, 2 };
+	PriorityDeque<int> queue = { 3, 1, 2 };
 
 	ASSERT_EQ(queue.removeMax(), 3);
 	ASSERT_EQ(queue.toString(), "[1, 2]");
@@ -83,7 +82,7 @@ TEST(PriorityDequeTest, Remove_Max)
 */
 TEST(PriorityDequeTest, Left_Shift_Operator)
 {
-	PriorityDeque queue;
+	PriorityDeque<int> queue;
 
 	queue << 4;
 	queue << 1;
@@ -97,7 +96,7 @@ TEST(PriorityDequeTest, Left_Shift_Operator)
 */
 TEST(PriorityDequeTest, Right_Shift_Operator)
 {
-	PriorityDeque queue = { 6, 2, 8 };
+	PriorityDeque<int> queue = { 6, 2, 8 };
 	int value = 0;
 
 	queue >> value;
@@ -107,12 +106,12 @@ TEST(PriorityDequeTest, Right_Shift_Operator)
 }
 
 /**
-* @brief Тест оператора приравнивания класса очереди с приоритетом
+* @brief Тест оператора присваивания класса очереди с приоритетом
 */
 TEST(PriorityDequeTest, Assignment_Operator)
 {
-	PriorityDeque queue = { 4, 2 };
-	PriorityDeque copy;
+	PriorityDeque<int> queue = { 4, 2 };
+	PriorityDeque<int> copy;
 
 	copy = queue;
 	queue.removeMax();
@@ -126,8 +125,8 @@ TEST(PriorityDequeTest, Assignment_Operator)
 */
 TEST(PriorityDequeTest, Copy_Constructor)
 {
-	PriorityDeque queue = { 2, 1, 3 };
-	PriorityDeque copy(queue);
+	PriorityDeque<int> queue = { 2, 1, 3 };
+	PriorityDeque<int> copy(queue);
 
 	queue.insert(0);
 
@@ -140,34 +139,36 @@ TEST(PriorityDequeTest, Copy_Constructor)
 */
 TEST(PriorityDequeTest, Move_Constructor)
 {
-	PriorityDeque queue = { 3, 1, 2 };
-	PriorityDeque moved(std::move(queue));
+	PriorityDeque<int> queue = { 3, 1, 2 };
+	PriorityDeque<int> moved(std::move(queue));
 
 	ASSERT_EQ(moved.toString(), "[1, 2, 3]");
+	ASSERT_EQ(queue.getSize(), 0);
 }
 
 /**
-* @brief Тест перемещающего оператора приравнивания класса очереди с приоритетом
+* @brief Тест перемещающего оператора присваивания класса очереди с приоритетом
 */
 TEST(PriorityDequeTest, Move_Assignment_Operator)
 {
-	PriorityDeque queue = { 9, 1, 5 };
-	PriorityDeque moved;
+	PriorityDeque<int> queue = { 9, 1, 5 };
+	PriorityDeque<int> moved;
 
 	moved = std::move(queue);
 
 	ASSERT_EQ(moved.toString(), "[1, 5, 9]");
+	ASSERT_EQ(queue.getSize(), 0);
 }
 
 /**
-* @brief Тест исключений при работе с пустой очередью
+* @brief Тест завершения программы при работе с пустой очередью
 */
-TEST(PriorityDequeTest, Empty_Queue_Exception)
+TEST(PriorityDequeTest, Empty_Queue_Exit)
 {
-	PriorityDeque queue;
+	PriorityDeque<int> queue;
 
-	ASSERT_THROW(queue.getMin(), out_of_range);
-	ASSERT_THROW(queue.getMax(), out_of_range);
-	ASSERT_THROW(queue.removeMin(), out_of_range);
-	ASSERT_THROW(queue.removeMax(), out_of_range);
+	EXPECT_EXIT(queue.getMin(), ::testing::ExitedWithCode(1), "Очередь пуста");
+	EXPECT_EXIT(queue.getMax(), ::testing::ExitedWithCode(1), "Очередь пуста");
+	EXPECT_EXIT(queue.removeMin(), ::testing::ExitedWithCode(1), "Очередь пуста");
+	EXPECT_EXIT(queue.removeMax(), ::testing::ExitedWithCode(1), "Очередь пуста");
 }
