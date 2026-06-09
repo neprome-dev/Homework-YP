@@ -1,22 +1,35 @@
 #pragma once
-#include <iostream>
 #include <string>
-#include <initializer_list>
 
-using namespace std;
+/**
+* @brief Элемент очереди: хранит данные и их приоритет раздельно
+*/
+struct Node
+{
+	/**
+	* @param value - полезные данные элемента
+	*/
+	std::string value;
+
+	/**
+	* @param priority - приоритет элемента, по которому происходит упорядочивание
+	*/
+	int priority;
+};
 
 /**
 * @brief Класс "Очередь с приоритетом с двусторонним доступом"
-* @tparam Type - тип хранимых элементов
+*
+* Элементы хранятся в массиве, упорядоченном по возрастанию приоритета.
+* Элемент с наименьшим приоритетом находится в начале, с наибольшим - в конце.
 */
-template<typename Type>
 class PriorityDeque
 {
 private:
 	/**
-	* @param data - массив элементов очереди (хранится по возрастанию)
+	* @param data - массив элементов очереди (упорядочен по приоритету)
 	*/
-	Type* data;
+	Node* data;
 
 	/**
 	* @param count - количество элементов очереди
@@ -24,284 +37,106 @@ private:
 	size_t count;
 
 	/**
-	* @brief Выводит ошибку и завершает работу программы
+	* @brief Выводит сообщение об ошибке и завершает работу программы
 	* @param text - текст, выводимый на экран
 	*/
-	void ERROR(const string text) const
-	{
-		cerr << text;
-		exit(1);
-	}
+	void ERROR(const std::string text) const;
 
 public:
 	/**
 	* @brief Базовый конструктор по-умолчанию, создаёт пустую очередь
 	*/
-	PriorityDeque(void) : data(nullptr), count(0) {}
-
-	/**
-	* @brief Конструктор, принимающий список инициализации
-	* @param values - список значений, добавляемых в очередь
-	*/
-	PriorityDeque(const initializer_list<Type> values) : data(nullptr), count(0)
-	{
-		for (const Type& value : values)
-		{
-			insert(value);
-		}
-	}
+	PriorityDeque(void);
 
 	/**
 	* @brief Конструктор копирования
 	* @param other - очередь, которая будет скопирована
 	*/
-	PriorityDeque(const PriorityDeque& other) : data(nullptr), count(other.count)
-	{
-		if (count > 0)
-		{
-			data = new Type[count];
-			for (size_t i = 0; i < count; i++)
-			{
-				data[i] = other.data[i];
-			}
-		}
-	}
+	PriorityDeque(const PriorityDeque& other);
 
 	/**
 	* @brief Конструктор перемещения
 	* @param other - очередь, ресурсы которой будут перемещены
 	*/
-	PriorityDeque(PriorityDeque&& other) noexcept : data(other.data), count(other.count)
-	{
-		other.data = nullptr;
-		other.count = 0;
-	}
+	PriorityDeque(PriorityDeque&& other) noexcept;
 
 	/**
 	* @brief Оператор присваивания
 	* @param other - очередь, значения которой будут скопированы
 	* @return Ссылка на текущую очередь
 	*/
-	PriorityDeque& operator = (const PriorityDeque& other)
-	{
-		if (this != &other)
-		{
-			delete[] data;
-
-			count = other.count;
-			data = (count > 0) ? new Type[count] : nullptr;
-			for (size_t i = 0; i < count; i++)
-			{
-				data[i] = other.data[i];
-			}
-		}
-
-		return *this;
-	}
+	PriorityDeque& operator = (const PriorityDeque& other);
 
 	/**
 	* @brief Оператор перемещающего присваивания
 	* @param other - очередь, ресурсы которой будут перемещены
 	* @return Ссылка на текущую очередь
 	*/
-	PriorityDeque& operator = (PriorityDeque&& other) noexcept
-	{
-		if (this != &other)
-		{
-			delete[] data;
-
-			data = other.data;
-			count = other.count;
-
-			other.data = nullptr;
-			other.count = 0;
-		}
-
-		return *this;
-	}
+	PriorityDeque& operator = (PriorityDeque&& other) noexcept;
 
 	/**
 	* @brief Деструктор, освобождает выделенную память
 	*/
-	~PriorityDeque(void)
-	{
-		delete[] data;
-	}
+	~PriorityDeque(void);
 
 	/**
-	* @brief Добавляет элемент в очередь с сохранением порядка по возрастанию
-	* @param value - добавляемое значение
+	* @brief Добавляет элемент в очередь с сохранением порядка по приоритету
+	* @param value - данные добавляемого элемента
+	* @param priority - приоритет добавляемого элемента
 	*/
-	void insert(const Type& value)
-	{
-		size_t index = 0;
-
-		while (index < count && data[index] <= value)
-		{
-			++index;
-		}
-
-		Type* newdata = new Type[count + 1];
-
-		for (size_t i = 0; i < index; i++)
-		{
-			newdata[i] = data[i];
-		}
-
-		newdata[index] = value;
-
-		for (size_t i = index; i < count; i++)
-		{
-			newdata[i + 1] = data[i];
-		}
-
-		delete[] data;
-		data = newdata;
-		++count;
-	}
+	void insert(const std::string& value, int priority);
 
 	/**
 	* @brief Удаляет элемент с наименьшим приоритетом
-	* @return Удалённое значение
+	* @return Данные удалённого элемента
 	*/
-	Type removeMin(void)
-	{
-		if (isEmpty())
-		{
-			ERROR("Очередь пуста");
-		}
-
-		const Type value = data[0];
-
-		Type* newdata = (count - 1 > 0) ? new Type[count - 1] : nullptr;
-		for (size_t i = 1; i < count; i++)
-		{
-			newdata[i - 1] = data[i];
-		}
-
-		delete[] data;
-		data = newdata;
-		--count;
-
-		return value;
-	}
+	std::string removeMin(void);
 
 	/**
 	* @brief Удаляет элемент с наибольшим приоритетом
-	* @return Удалённое значение
+	* @return Данные удалённого элемента
 	*/
-	Type removeMax(void)
-	{
-		if (isEmpty())
-		{
-			ERROR("Очередь пуста");
-		}
-
-		const Type value = data[count - 1];
-
-		Type* newdata = (count - 1 > 0) ? new Type[count - 1] : nullptr;
-		for (size_t i = 0; i + 1 < count; i++)
-		{
-			newdata[i] = data[i];
-		}
-
-		delete[] data;
-		data = newdata;
-		--count;
-
-		return value;
-	}
+	std::string removeMax(void);
 
 	/**
-	* @brief Получает элемент с наименьшим приоритетом
-	* @return Значение с наименьшим приоритетом
+	* @brief Получает данные элемента с наименьшим приоритетом
+	* @return Данные элемента с наименьшим приоритетом
 	*/
-	Type getMin(void) const
-	{
-		if (isEmpty())
-		{
-			ERROR("Очередь пуста");
-		}
-
-		return data[0];
-	}
+	std::string getMin(void) const;
 
 	/**
-	* @brief Получает элемент с наибольшим приоритетом
-	* @return Значение с наибольшим приоритетом
+	* @brief Получает данные элемента с наибольшим приоритетом
+	* @return Данные элемента с наибольшим приоритетом
 	*/
-	Type getMax(void) const
-	{
-		if (isEmpty())
-		{
-			ERROR("Очередь пуста");
-		}
+	std::string getMax(void) const;
 
-		return data[count - 1];
-	}
+	/**
+	* @brief Получает приоритет элемента с наименьшим приоритетом
+	* @return Наименьший приоритет в очереди
+	*/
+	int getMinPriority(void) const;
+
+	/**
+	* @brief Получает приоритет элемента с наибольшим приоритетом
+	* @return Наибольший приоритет в очереди
+	*/
+	int getMaxPriority(void) const;
 
 	/**
 	* @brief Получает количество элементов очереди
 	* @return Количество элементов
 	*/
-	size_t getSize(void) const
-	{
-		return count;
-	}
+	size_t getSize(void) const;
 
 	/**
 	* @brief Проверяет очередь на пустоту
 	* @return Если очередь пустая - true, иначе false
 	*/
-	bool isEmpty(void) const
-	{
-		return count == 0;
-	}
+	bool isEmpty(void) const;
 
 	/**
 	* @brief Получает строковое представление очереди
-	* @return Очередь в формате [a, b, c]
+	* @return Очередь в формате [value(priority), value(priority)]
 	*/
-	string toString(void) const
-	{
-		string result = "[";
-
-		for (size_t i = 0; i < count; ++i)
-		{
-			result += to_string(data[i]);
-
-			if (i + 1 < count)
-			{
-				result += ", ";
-			}
-		}
-
-		result += "]";
-
-		return result;
-	}
-
-	/**
-	* @brief Оператор сдвига влево, добавляет элемент в очередь
-	* @param value - добавляемое значение
-	* @return Ссылка на текущую очередь
-	*/
-	PriorityDeque& operator << (const Type& value)
-	{
-		insert(value);
-
-		return *this;
-	}
-
-	/**
-	* @brief Оператор сдвига вправо, извлекает элемент с наибольшим приоритетом
-	* @param value - переменная, в которую будет записан извлечённый элемент
-	* @return Ссылка на текущую очередь
-	*/
-	PriorityDeque& operator >> (Type& value)
-	{
-		value = removeMax();
-
-		return *this;
-	}
+	std::string toString(void) const;
 };
