@@ -1,15 +1,17 @@
 #include "../include/ClassPriorityDeque.h"
-#include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
-void PriorityDeque::ERROR(const string text) const
-{
-	cerr << text;
-	exit(1);
-}
-
 PriorityDeque::PriorityDeque(void) : data(nullptr), count(0) {}
+
+PriorityDeque::PriorityDeque(initializer_list<pair<int, int>> values) : data(nullptr), count(0)
+{
+	for (const pair<int, int>& element : values)
+	{
+		insert(element.first, element.second);
+	}
+}
 
 PriorityDeque::PriorityDeque(const PriorityDeque& other) : data(nullptr), count(other.count)
 {
@@ -67,7 +69,7 @@ PriorityDeque::~PriorityDeque(void)
 	delete[] data;
 }
 
-void PriorityDeque::insert(const string& value, int priority)
+void PriorityDeque::insert(int value, int priority)
 {
 	size_t index = 0;
 
@@ -96,14 +98,14 @@ void PriorityDeque::insert(const string& value, int priority)
 	++count;
 }
 
-string PriorityDeque::removeMin(void)
+int PriorityDeque::removeMin(void)
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
-	const string value = data[0].value;
+	const int value = data[0].value;
 
 	Node* newdata = (count - 1 > 0) ? new Node[count - 1] : nullptr;
 	for (size_t i = 1; i < count; i++)
@@ -118,14 +120,14 @@ string PriorityDeque::removeMin(void)
 	return value;
 }
 
-string PriorityDeque::removeMax(void)
+int PriorityDeque::removeMax(void)
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
-	const string value = data[count - 1].value;
+	const int value = data[count - 1].value;
 
 	Node* newdata = (count - 1 > 0) ? new Node[count - 1] : nullptr;
 	for (size_t i = 0; i + 1 < count; i++)
@@ -140,21 +142,21 @@ string PriorityDeque::removeMax(void)
 	return value;
 }
 
-string PriorityDeque::getMin(void) const
+int PriorityDeque::getMin(void) const
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
 	return data[0].value;
 }
 
-string PriorityDeque::getMax(void) const
+int PriorityDeque::getMax(void) const
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
 	return data[count - 1].value;
@@ -164,7 +166,7 @@ int PriorityDeque::getMinPriority(void) const
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
 	return data[0].priority;
@@ -174,7 +176,7 @@ int PriorityDeque::getMaxPriority(void) const
 {
 	if (isEmpty())
 	{
-		ERROR("Очередь пуста");
+		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
 	}
 
 	return data[count - 1].priority;
@@ -196,7 +198,7 @@ string PriorityDeque::toString(void) const
 
 	for (size_t i = 0; i < count; ++i)
 	{
-		result += data[i].value + "(" + to_string(data[i].priority) + ")";
+		result += to_string(data[i].value) + "(" + to_string(data[i].priority) + ")";
 
 		if (i + 1 < count)
 		{
@@ -207,4 +209,18 @@ string PriorityDeque::toString(void) const
 	result += "]";
 
 	return result;
+}
+
+PriorityDeque& PriorityDeque::operator << (const pair<int, int>& element)
+{
+	insert(element.first, element.second);
+
+	return *this;
+}
+
+PriorityDeque& PriorityDeque::operator >> (int& value)
+{
+	value = removeMax();
+
+	return *this;
 }
