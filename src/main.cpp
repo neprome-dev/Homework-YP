@@ -12,24 +12,24 @@ int main()
 	cout << "Вариант 10\n";
 	cout << "Очередь с приоритетом с двусторонним доступом\n\n";
 
-	PriorityDeque<int> queue = { 5, 1, 9, 3, 7 };
+	PriorityDeque queue;
 
-	cout << "Исходная очередь: " << queue.toString() << '\n';
-	cout << "Минимальный приоритет: " << queue.getMin() << '\n';
-	cout << "Максимальный приоритет: " << queue.getMax() << "\n\n";
+	queue.insert("Помыть посуду", 5);
+	queue.insert("Вызвать скорую", 1);
+	queue.insert("Сделать домашку", 9);
+	queue.insert("Купить хлеб", 3);
 
-	queue.insert(4);
-	queue << 10;
+	cout << "Очередь задач: " << queue.toString() << "\n\n";
 
-	cout << "Очередь после добавления элементов: " << queue.toString() << '\n';
+	cout << "Самый срочный (минимальный приоритет): "
+		<< queue.getMin() << " [приоритет " << queue.getMinPriority() << "]\n";
+	cout << "Наименее срочный (максимальный приоритет): "
+		<< queue.getMax() << " [приоритет " << queue.getMaxPriority() << "]\n\n";
 
-	cout << "Удалён элемент с наименьшим приоритетом: " << queue.removeMin() << '\n';
+	cout << "Выполнили самую срочную задачу: " << queue.removeMin() << '\n';
+	cout << "Отложили наименее срочную задачу: " << queue.removeMax() << '\n';
 
-	int value = 0;
-	queue >> value;
-
-	cout << "Удалён элемент с наибольшим приоритетом: " << value << '\n';
-	cout << "Очередь после удаления элементов: " << queue.toString() << '\n';
+	cout << "\nОставшиеся задачи: " << queue.toString() << '\n';
 
 	return 0;
 }
