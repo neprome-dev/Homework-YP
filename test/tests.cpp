@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
+#include <stdexcept>
 #include <utility>
 #include "../include/ClassPriorityDeque.h"
 
 using namespace std;
 
 /**
-* @brief Тест конструктора по-умолчанию класса очереди с приоритетом
+* @brief Тест конструктора по-умолчанию
 */
 TEST(PriorityDequeTest, Default_Constructor)
 {
@@ -17,34 +18,39 @@ TEST(PriorityDequeTest, Default_Constructor)
 }
 
 /**
+* @brief Тест конструктора со списком инициализации (упорядочивание по приоритету)
+*/
+TEST(PriorityDequeTest, InitializerList_Constructor)
+{
+	PriorityDeque queue = { {100, 5}, {200, 1}, {300, 9}, {400, 3} };
+
+	ASSERT_EQ(queue.getSize(), 4);
+	ASSERT_EQ(queue.toString(), "[200(1), 400(3), 100(5), 300(9)]");
+}
+
+/**
 * @brief Тест добавления элементов с упорядочиванием по приоритету
 */
 TEST(PriorityDequeTest, Insert_Orders_By_Priority)
 {
 	PriorityDeque queue;
 
-	queue.insert("B", 5);
-	queue.insert("A", 1);
-	queue.insert("C", 9);
-	queue.insert("D", 3);
+	queue.insert(10, 5);
+	queue.insert(20, 1);
+	queue.insert(30, 9);
 
-	ASSERT_EQ(queue.getSize(), 4);
-	ASSERT_EQ(queue.toString(), "[A(1), D(3), B(5), C(9)]");
+	ASSERT_EQ(queue.toString(), "[20(1), 10(5), 30(9)]");
 }
 
 /**
-* @brief Тест получения данных с минимальным и максимальным приоритетом
+* @brief Тест поиска элементов с наименьшим и наибольшим приоритетом
 */
 TEST(PriorityDequeTest, Get_Min_And_Max)
 {
-	PriorityDeque queue;
+	PriorityDeque queue = { {11, 2}, {22, 8}, {33, 5} };
 
-	queue.insert("low", 2);
-	queue.insert("high", 8);
-	queue.insert("mid", 5);
-
-	ASSERT_EQ(queue.getMin(), "low");
-	ASSERT_EQ(queue.getMax(), "high");
+	ASSERT_EQ(queue.getMin(), 11);
+	ASSERT_EQ(queue.getMax(), 22);
 	ASSERT_EQ(queue.getMinPriority(), 2);
 	ASSERT_EQ(queue.getMaxPriority(), 8);
 }
@@ -54,15 +60,11 @@ TEST(PriorityDequeTest, Get_Min_And_Max)
 */
 TEST(PriorityDequeTest, Remove_Min)
 {
-	PriorityDeque queue;
+	PriorityDeque queue = { {10, 2}, {20, 1}, {30, 3} };
 
-	queue.insert("second", 2);
-	queue.insert("first", 1);
-	queue.insert("third", 3);
-
-	ASSERT_EQ(queue.removeMin(), "first");
-	ASSERT_EQ(queue.toString(), "[second(2), third(3)]");
-	ASSERT_EQ(queue.getMin(), "second");
+	ASSERT_EQ(queue.removeMin(), 20);
+	ASSERT_EQ(queue.toString(), "[10(2), 30(3)]");
+	ASSERT_EQ(queue.getMin(), 10);
 }
 
 /**
@@ -70,90 +72,105 @@ TEST(PriorityDequeTest, Remove_Min)
 */
 TEST(PriorityDequeTest, Remove_Max)
 {
-	PriorityDeque queue;
+	PriorityDeque queue = { {10, 2}, {20, 1}, {30, 3} };
 
-	queue.insert("second", 2);
-	queue.insert("first", 1);
-	queue.insert("third", 3);
-
-	ASSERT_EQ(queue.removeMax(), "third");
-	ASSERT_EQ(queue.toString(), "[first(1), second(2)]");
-	ASSERT_EQ(queue.getMax(), "second");
+	ASSERT_EQ(queue.removeMax(), 30);
+	ASSERT_EQ(queue.toString(), "[20(1), 10(2)]");
+	ASSERT_EQ(queue.getMax(), 10);
 }
 
 /**
-* @brief Тест конструктора копирования класса очереди с приоритетом
+* @brief Тест оператора сдвига влево (добавление)
 */
-TEST(PriorityDequeTest, Copy_Constructor)
+TEST(PriorityDequeTest, Left_Shift_Operator)
 {
 	PriorityDeque queue;
-	queue.insert("a", 1);
-	queue.insert("b", 2);
 
-	PriorityDeque copy(queue);
-	queue.insert("c", 3);
+	queue << make_pair(40, 4);
+	queue << make_pair(10, 1);
+	queue << make_pair(30, 3);
 
-	ASSERT_EQ(copy.toString(), "[a(1), b(2)]");
-	ASSERT_EQ(queue.toString(), "[a(1), b(2), c(3)]");
+	ASSERT_EQ(queue.toString(), "[10(1), 30(3), 40(4)]");
 }
 
 /**
-* @brief Тест оператора присваивания класса очереди с приоритетом
+* @brief Тест оператора сдвига вправо (извлечение максимума)
+*/
+TEST(PriorityDequeTest, Right_Shift_Operator)
+{
+	PriorityDeque queue = { {60, 6}, {20, 2}, {80, 8} };
+	int value = 0;
+
+	queue >> value;
+
+	ASSERT_EQ(value, 80);
+	ASSERT_EQ(queue.toString(), "[20(2), 60(6)]");
+}
+
+/**
+* @brief Тест оператора присваивания (глубокое копирование)
 */
 TEST(PriorityDequeTest, Assignment_Operator)
 {
-	PriorityDeque queue;
-	queue.insert("x", 4);
-	queue.insert("y", 2);
-
+	PriorityDeque queue = { {40, 4}, {20, 2} };
 	PriorityDeque copy;
+
 	copy = queue;
 	queue.removeMax();
 
-	ASSERT_EQ(copy.toString(), "[y(2), x(4)]");
-	ASSERT_EQ(queue.toString(), "[y(2)]");
+	ASSERT_EQ(copy.toString(), "[20(2), 40(4)]");
+	ASSERT_EQ(queue.toString(), "[20(2)]");
 }
 
 /**
-* @brief Тест конструктора перемещения класса очереди с приоритетом
+* @brief Тест конструктора копирования (глубокое копирование)
+*/
+TEST(PriorityDequeTest, Copy_Constructor)
+{
+	PriorityDeque queue = { {20, 2}, {10, 1}, {30, 3} };
+	PriorityDeque copy(queue);
+
+	queue.insert(0, 0);
+
+	ASSERT_EQ(copy.toString(), "[10(1), 20(2), 30(3)]");
+	ASSERT_EQ(queue.toString(), "[0(0), 10(1), 20(2), 30(3)]");
+}
+
+/**
+* @brief Тест конструктора перемещения
 */
 TEST(PriorityDequeTest, Move_Constructor)
 {
-	PriorityDeque queue;
-	queue.insert("a", 1);
-	queue.insert("b", 2);
-
+	PriorityDeque queue = { {30, 3}, {10, 1}, {20, 2} };
 	PriorityDeque moved(std::move(queue));
 
-	ASSERT_EQ(moved.toString(), "[a(1), b(2)]");
+	ASSERT_EQ(moved.toString(), "[10(1), 20(2), 30(3)]");
 	ASSERT_EQ(queue.getSize(), 0);
 }
 
 /**
-* @brief Тест перемещающего оператора присваивания класса очереди с приоритетом
+* @brief Тест перемещающего оператора присваивания
 */
 TEST(PriorityDequeTest, Move_Assignment_Operator)
 {
-	PriorityDeque queue;
-	queue.insert("a", 1);
-	queue.insert("b", 5);
-
+	PriorityDeque queue = { {90, 9}, {10, 1}, {50, 5} };
 	PriorityDeque moved;
+
 	moved = std::move(queue);
 
-	ASSERT_EQ(moved.toString(), "[a(1), b(5)]");
+	ASSERT_EQ(moved.toString(), "[10(1), 50(5), 90(9)]");
 	ASSERT_EQ(queue.getSize(), 0);
 }
 
 /**
-* @brief Тест завершения программы при работе с пустой очередью
+* @brief Тест выброса исключения при работе с пустой очередью
 */
-TEST(PriorityDequeTest, Empty_Queue_Exit)
+TEST(PriorityDequeTest, Empty_Queue_Throws)
 {
 	PriorityDeque queue;
 
-	EXPECT_EXIT(queue.getMin(), ::testing::ExitedWithCode(1), "Очередь пуста");
-	EXPECT_EXIT(queue.getMax(), ::testing::ExitedWithCode(1), "Очередь пуста");
-	EXPECT_EXIT(queue.removeMin(), ::testing::ExitedWithCode(1), "Очередь пуста");
-	EXPECT_EXIT(queue.removeMax(), ::testing::ExitedWithCode(1), "Очередь пуста");
+	ASSERT_THROW(queue.getMin(), std::out_of_range);
+	ASSERT_THROW(queue.getMax(), std::out_of_range);
+	ASSERT_THROW(queue.removeMin(), std::out_of_range);
+	ASSERT_THROW(queue.removeMax(), std::out_of_range);
 }
