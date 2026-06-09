@@ -19,8 +19,11 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_library(core INTERFACE)
-target_include_directories(core INTERFACE
+add_library(core
+src/ClassPriorityDeque.cpp
+)
+
+target_include_directories(core PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
