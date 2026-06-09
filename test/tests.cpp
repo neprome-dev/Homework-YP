@@ -9,7 +9,7 @@ using namespace std;
 */
 TEST(PriorityDequeTest, Default_Constructor)
 {
-	PriorityDeque<int> queue;
+	PriorityDeque queue;
 
 	ASSERT_TRUE(queue.isEmpty());
 	ASSERT_EQ(queue.getSize(), 0);
@@ -17,40 +17,36 @@ TEST(PriorityDequeTest, Default_Constructor)
 }
 
 /**
-* @brief Тест конструктора со списком инициализации класса очереди с приоритетом
+* @brief Тест добавления элементов с упорядочиванием по приоритету
 */
-TEST(PriorityDequeTest, InitializerList_Constructor)
+TEST(PriorityDequeTest, Insert_Orders_By_Priority)
 {
-	PriorityDeque<int> queue = { 5, 1, 4, 2, 3 };
+	PriorityDeque queue;
 
-	ASSERT_FALSE(queue.isEmpty());
-	ASSERT_EQ(queue.getSize(), 5);
-	ASSERT_EQ(queue.toString(), "[1, 2, 3, 4, 5]");
+	queue.insert("B", 5);
+	queue.insert("A", 1);
+	queue.insert("C", 9);
+	queue.insert("D", 3);
+
+	ASSERT_EQ(queue.getSize(), 4);
+	ASSERT_EQ(queue.toString(), "[A(1), D(3), B(5), C(9)]");
 }
 
 /**
-* @brief Тест добавления элемента в очередь с приоритетом
-*/
-TEST(PriorityDequeTest, Insert)
-{
-	PriorityDeque<int> queue = { 4, 1, 7 };
-
-	queue.insert(5);
-	queue.insert(0);
-
-	ASSERT_EQ(queue.toString(), "[0, 1, 4, 5, 7]");
-	ASSERT_EQ(queue.getSize(), 5);
-}
-
-/**
-* @brief Тест получения минимального и максимального приоритета
+* @brief Тест получения данных с минимальным и максимальным приоритетом
 */
 TEST(PriorityDequeTest, Get_Min_And_Max)
 {
-	PriorityDeque<int> queue = { 6, 2, 8, 1 };
+	PriorityDeque queue;
 
-	ASSERT_EQ(queue.getMin(), 1);
-	ASSERT_EQ(queue.getMax(), 8);
+	queue.insert("low", 2);
+	queue.insert("high", 8);
+	queue.insert("mid", 5);
+
+	ASSERT_EQ(queue.getMin(), "low");
+	ASSERT_EQ(queue.getMax(), "high");
+	ASSERT_EQ(queue.getMinPriority(), 2);
+	ASSERT_EQ(queue.getMaxPriority(), 8);
 }
 
 /**
@@ -58,11 +54,15 @@ TEST(PriorityDequeTest, Get_Min_And_Max)
 */
 TEST(PriorityDequeTest, Remove_Min)
 {
-	PriorityDeque<int> queue = { 3, 1, 2 };
+	PriorityDeque queue;
 
-	ASSERT_EQ(queue.removeMin(), 1);
-	ASSERT_EQ(queue.toString(), "[2, 3]");
-	ASSERT_EQ(queue.getMin(), 2);
+	queue.insert("second", 2);
+	queue.insert("first", 1);
+	queue.insert("third", 3);
+
+	ASSERT_EQ(queue.removeMin(), "first");
+	ASSERT_EQ(queue.toString(), "[second(2), third(3)]");
+	ASSERT_EQ(queue.getMin(), "second");
 }
 
 /**
@@ -70,54 +70,15 @@ TEST(PriorityDequeTest, Remove_Min)
 */
 TEST(PriorityDequeTest, Remove_Max)
 {
-	PriorityDeque<int> queue = { 3, 1, 2 };
+	PriorityDeque queue;
 
-	ASSERT_EQ(queue.removeMax(), 3);
-	ASSERT_EQ(queue.toString(), "[1, 2]");
-	ASSERT_EQ(queue.getMax(), 2);
-}
+	queue.insert("second", 2);
+	queue.insert("first", 1);
+	queue.insert("third", 3);
 
-/**
-* @brief Тест оператора сдвига влево класса очереди с приоритетом
-*/
-TEST(PriorityDequeTest, Left_Shift_Operator)
-{
-	PriorityDeque<int> queue;
-
-	queue << 4;
-	queue << 1;
-	queue << 3;
-
-	ASSERT_EQ(queue.toString(), "[1, 3, 4]");
-}
-
-/**
-* @brief Тест оператора сдвига вправо класса очереди с приоритетом
-*/
-TEST(PriorityDequeTest, Right_Shift_Operator)
-{
-	PriorityDeque<int> queue = { 6, 2, 8 };
-	int value = 0;
-
-	queue >> value;
-
-	ASSERT_EQ(value, 8);
-	ASSERT_EQ(queue.toString(), "[2, 6]");
-}
-
-/**
-* @brief Тест оператора присваивания класса очереди с приоритетом
-*/
-TEST(PriorityDequeTest, Assignment_Operator)
-{
-	PriorityDeque<int> queue = { 4, 2 };
-	PriorityDeque<int> copy;
-
-	copy = queue;
-	queue.removeMax();
-
-	ASSERT_EQ(copy.toString(), "[2, 4]");
-	ASSERT_EQ(queue.toString(), "[2]");
+	ASSERT_EQ(queue.removeMax(), "third");
+	ASSERT_EQ(queue.toString(), "[first(1), second(2)]");
+	ASSERT_EQ(queue.getMax(), "second");
 }
 
 /**
@@ -125,13 +86,32 @@ TEST(PriorityDequeTest, Assignment_Operator)
 */
 TEST(PriorityDequeTest, Copy_Constructor)
 {
-	PriorityDeque<int> queue = { 2, 1, 3 };
-	PriorityDeque<int> copy(queue);
+	PriorityDeque queue;
+	queue.insert("a", 1);
+	queue.insert("b", 2);
 
-	queue.insert(0);
+	PriorityDeque copy(queue);
+	queue.insert("c", 3);
 
-	ASSERT_EQ(copy.toString(), "[1, 2, 3]");
-	ASSERT_EQ(queue.toString(), "[0, 1, 2, 3]");
+	ASSERT_EQ(copy.toString(), "[a(1), b(2)]");
+	ASSERT_EQ(queue.toString(), "[a(1), b(2), c(3)]");
+}
+
+/**
+* @brief Тест оператора присваивания класса очереди с приоритетом
+*/
+TEST(PriorityDequeTest, Assignment_Operator)
+{
+	PriorityDeque queue;
+	queue.insert("x", 4);
+	queue.insert("y", 2);
+
+	PriorityDeque copy;
+	copy = queue;
+	queue.removeMax();
+
+	ASSERT_EQ(copy.toString(), "[y(2), x(4)]");
+	ASSERT_EQ(queue.toString(), "[y(2)]");
 }
 
 /**
@@ -139,10 +119,13 @@ TEST(PriorityDequeTest, Copy_Constructor)
 */
 TEST(PriorityDequeTest, Move_Constructor)
 {
-	PriorityDeque<int> queue = { 3, 1, 2 };
-	PriorityDeque<int> moved(std::move(queue));
+	PriorityDeque queue;
+	queue.insert("a", 1);
+	queue.insert("b", 2);
 
-	ASSERT_EQ(moved.toString(), "[1, 2, 3]");
+	PriorityDeque moved(std::move(queue));
+
+	ASSERT_EQ(moved.toString(), "[a(1), b(2)]");
 	ASSERT_EQ(queue.getSize(), 0);
 }
 
@@ -151,12 +134,14 @@ TEST(PriorityDequeTest, Move_Constructor)
 */
 TEST(PriorityDequeTest, Move_Assignment_Operator)
 {
-	PriorityDeque<int> queue = { 9, 1, 5 };
-	PriorityDeque<int> moved;
+	PriorityDeque queue;
+	queue.insert("a", 1);
+	queue.insert("b", 5);
 
+	PriorityDeque moved;
 	moved = std::move(queue);
 
-	ASSERT_EQ(moved.toString(), "[1, 5, 9]");
+	ASSERT_EQ(moved.toString(), "[a(1), b(5)]");
 	ASSERT_EQ(queue.getSize(), 0);
 }
 
@@ -165,7 +150,7 @@ TEST(PriorityDequeTest, Move_Assignment_Operator)
 */
 TEST(PriorityDequeTest, Empty_Queue_Exit)
 {
-	PriorityDeque<int> queue;
+	PriorityDeque queue;
 
 	EXPECT_EXIT(queue.getMin(), ::testing::ExitedWithCode(1), "Очередь пуста");
 	EXPECT_EXIT(queue.getMax(), ::testing::ExitedWithCode(1), "Очередь пуста");
