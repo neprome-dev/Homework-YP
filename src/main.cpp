@@ -5,31 +5,37 @@ using namespace std;
 
 /**
 * @brief Точка входа в программу
-* @return Если программа выполнена корректно - 0, иначе 1
+* @return Код завершения программы
 */
 int main()
 {
 	cout << "Вариант 10\n";
 	cout << "Очередь с приоритетом с двусторонним доступом\n\n";
 
-	PriorityDeque queue;
+	// Элементы задаются парами {значение, приоритет}
+	PriorityDeque queue = { {100, 5}, {200, 1}, {300, 9}, {400, 3} };
 
-	queue.insert("Помыть посуду", 5);
-	queue.insert("Вызвать скорую", 1);
-	queue.insert("Сделать домашку", 9);
-	queue.insert("Купить хлеб", 3);
+	cout << "Очередь {значение(приоритет)}: " << queue.toString() << "\n\n";
 
-	cout << "Очередь задач: " << queue.toString() << "\n\n";
+	cout << "Элемент с наименьшим приоритетом: значение " << queue.getMin()
+		<< ", приоритет " << queue.getMinPriority() << '\n';
+	cout << "Элемент с наибольшим приоритетом: значение " << queue.getMax()
+		<< ", приоритет " << queue.getMaxPriority() << "\n\n";
 
-	cout << "Самый срочный (минимальный приоритет): "
-		<< queue.getMin() << " [приоритет " << queue.getMinPriority() << "]\n";
-	cout << "Наименее срочный (максимальный приоритет): "
-		<< queue.getMax() << " [приоритет " << queue.getMaxPriority() << "]\n\n";
+	// Добавление элемента двумя способами
+	queue.insert(500, 7);
+	queue << make_pair(600, 2);
 
-	cout << "Выполнили самую срочную задачу: " << queue.removeMin() << '\n';
-	cout << "Отложили наименее срочную задачу: " << queue.removeMax() << '\n';
+	cout << "После добавления элементов: " << queue.toString() << "\n\n";
 
-	cout << "\nОставшиеся задачи: " << queue.toString() << '\n';
+	cout << "Удалён элемент с наименьшим приоритетом, его значение: " << queue.removeMin() << '\n';
+
+	int value = 0;
+	queue >> value;
+	cout << "Удалён элемент с наибольшим приоритетом, его значение: " << value << '\n';
+
+	cout << "\nИтоговая очередь: " << queue.toString() << '\n';
+	cout << "Пуста ли очередь? " << (queue.isEmpty() ? "да" : "нет") << '\n';
 
 	return 0;
 }
