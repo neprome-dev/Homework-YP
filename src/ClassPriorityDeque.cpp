@@ -102,7 +102,7 @@ int PriorityDeque::removeMin(void)
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	const int value = data[0].value;
@@ -124,7 +124,7 @@ int PriorityDeque::removeMax(void)
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	const int value = data[count - 1].value;
@@ -146,7 +146,7 @@ int PriorityDeque::getMin(void) const
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	return data[0].value;
@@ -156,7 +156,7 @@ int PriorityDeque::getMax(void) const
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	return data[count - 1].value;
@@ -166,7 +166,7 @@ int PriorityDeque::getMinPriority(void) const
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	return data[0].priority;
@@ -176,7 +176,7 @@ int PriorityDeque::getMaxPriority(void) const
 {
 	if (isEmpty())
 	{
-		throw out_of_range("ÐÑÐµÑÐµÐ´Ñ Ð¿ÑÑÑÐ°");
+		throw out_of_range("Очередь пуста");
 	}
 
 	return data[count - 1].priority;
