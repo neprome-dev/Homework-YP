@@ -69,7 +69,7 @@ PriorityDeque::~PriorityDeque(void)
 	delete[] data;
 }
 
-void PriorityDeque::insert(int value, int priority)
+void PriorityDeque::insert(const int value, const int priority)
 {
 	size_t index = 0;
 
