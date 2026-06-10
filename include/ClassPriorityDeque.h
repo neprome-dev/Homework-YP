@@ -53,7 +53,7 @@ public:
 	* Каждая пара значений списка задаёт элемент в формате {значение, приоритет}.
 	* @param values - список пар {значение, приоритет}
 	*/
-	PriorityDeque(std::initializer_list<std::pair<int, int>> values);
+	PriorityDeque(const std::initializer_list<std::pair<int, int>>& values);
 
 	/**
 	* @brief Конструктор копирования
@@ -91,7 +91,7 @@ public:
 	* @param value - целочисленные данные элемента
 	* @param priority - приоритет элемента
 	*/
-	void insert(int value, int priority);
+	void insert(const int value, const int priority);
 
 	/**
 	* @brief Удаляет элемент с наименьшим приоритетом
