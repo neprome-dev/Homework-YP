@@ -5,7 +5,7 @@ using namespace std;
 
 PriorityDeque::PriorityDeque(void) : data(nullptr), count(0) {}
 
-PriorityDeque::PriorityDeque(initializer_list<pair<int, int>> values) : data(nullptr), count(0)
+PriorityDeque::PriorityDeque(const initializer_list<pair<int, int>>& values) : data(nullptr), count(0)
 {
 	for (const pair<int, int>& element : values)
 	{
