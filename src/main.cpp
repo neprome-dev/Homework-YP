@@ -1,6 +1,5 @@
 #include <cstddef>
 #include <iostream>
-#include <memory>
 #include <stdexcept>
 
 #include "../include/Matrix.h"
@@ -40,11 +39,15 @@ int readInteger(const char* message);
 std::size_t readPositiveSize(const char* message);
 
 /**
- * @brief Выбрать генератор для заполнения матрицы
- * @param elementCount Количество элементов, которые нужно ввести с клавиатуры
- * @return Указатель на выбранный генератор
+ * @brief Выполнить оба задания с выбранным генератором
+ * @param rows Количество строк матрицы
+ * @param columns Количество столбцов матрицы
+ * @param generator Генератор для заполнения матриц
  */
-std::unique_ptr<Generator> chooseGenerator(const std::size_t elementCount);
+void executeTasks(
+    const std::size_t rows,
+    const std::size_t columns,
+    const Generator& generator);
 
 /**
  * @brief Точка входа в программу
@@ -56,17 +59,50 @@ int main()
     {
         const std::size_t rows = readPositiveSize("Количество строк: ");
         const std::size_t columns = readPositiveSize("Количество столбцов: ");
-        const auto generator = chooseGenerator(rows * columns);
 
-        Matrix<int> matrix(rows, columns);
-        Task1 task1(matrix, *generator);
-        Task2 task2(matrix, *generator);
+        std::cout
+            << "Способ заполнения:\n"
+            << RANDOM_FILL << " - случайные числа\n"
+            << KEYBOARD_FILL << " - ввод с клавиатуры\n"
+            << CONSTANT_FILL << " - постоянное значение\n"
+            << ZERO_FILL << " - нули\n";
 
-        task1.Fill();
-
-        std::cout << "\nИсходная матрица:\n" << matrix << '\n';
-        std::cout << "\nЗадание 1:\n" << task1.Solve() << '\n';
-        std::cout << "\nЗадание 2:\n" << task2.Solve() << '\n';
+        switch (readInteger("Ваш выбор: "))
+        {
+        case RANDOM_FILL:
+        {
+            const int minimum = readInteger("Минимальное значение: ");
+            const int maximum = readInteger("Максимальное значение: ");
+            const RandomGenerator generator(minimum, maximum);
+            executeTasks(rows, columns, generator);
+            break;
+        }
+        case KEYBOARD_FILL:
+        {
+            const std::size_t elementCount = rows * columns;
+            std::cout
+                << "Введите " << elementCount << " целых чисел для задания 1,\n"
+                << "затем столько же чисел для задания 2:\n";
+            const IStreamGenerator generator(std::cin);
+            executeTasks(rows, columns, generator);
+            break;
+        }
+        case CONSTANT_FILL:
+        {
+            const int value = readInteger("Значение: ");
+            const ConstantGenerator generator(value);
+            executeTasks(rows, columns, generator);
+            break;
+        }
+        case ZERO_FILL:
+        {
+            const ZeroGenerator generator;
+            executeTasks(rows, columns, generator);
+            break;
+        }
+        default:
+            throw std::invalid_argument("Неизвестный способ заполнения");
+        }
     }
     catch (const std::exception& error)
     {
@@ -101,31 +137,20 @@ std::size_t readPositiveSize(const char* message)
     return static_cast<std::size_t>(value);
 }
 
-std::unique_ptr<Generator> chooseGenerator(const std::size_t elementCount)
+void executeTasks(
+    const std::size_t rows,
+    const std::size_t columns,
+    const Generator& generator)
 {
-    std::cout
-        << "Способ заполнения:\n"
-        << RANDOM_FILL << " - случайные числа\n"
-        << KEYBOARD_FILL << " - ввод с клавиатуры\n"
-        << CONSTANT_FILL << " - постоянное значение\n"
-        << ZERO_FILL << " - нули\n";
+    Matrix<int> firstMatrix(rows, columns);
+    Task1 task1(firstMatrix, generator);
 
-    switch (readInteger("Ваш выбор: "))
-    {
-    case RANDOM_FILL:
-    {
-        const int minimum = readInteger("Минимальное значение: ");
-        const int maximum = readInteger("Максимальное значение: ");
-        return std::make_unique<RandomGenerator>(minimum, maximum);
-    }
-    case KEYBOARD_FILL:
-        std::cout << "Введите " << elementCount << " целых чисел:\n";
-        return std::make_unique<IStreamGenerator>(std::cin);
-    case CONSTANT_FILL:
-        return std::make_unique<ConstantGenerator>(readInteger("Значение: "));
-    case ZERO_FILL:
-        return std::make_unique<ZeroGenerator>();
-    default:
-        throw std::invalid_argument("Неизвестный способ заполнения");
-    }
+    std::cout << "\nИсходная матрица для задания 1:\n" << firstMatrix << '\n';
+    std::cout << "\nРезультат задания 1:\n" << task1.Solve() << '\n';
+
+    Matrix<int> secondMatrix(rows, columns);
+    Task2 task2(secondMatrix, generator);
+
+    std::cout << "\nИсходная матрица для задания 2:\n" << secondMatrix << '\n';
+    std::cout << "\nРезультат задания 2:\n" << task2.Solve() << '\n';
 }

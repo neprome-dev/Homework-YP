@@ -16,11 +16,6 @@ namespace miit::algebra
          */
         Matrix<int>& source_;
 
-        /**
-         * @brief Генератор, используемый для заполнения матрицы
-         */
-        const Generator& generator_;
-
     public:
         /**
          * @brief Создать объект задания для указанной матрицы
@@ -33,11 +28,6 @@ namespace miit::algebra
          * @brief Уничтожить объект задания
          */
         virtual ~Exercise() = default;
-
-        /**
-         * @brief Заполнить матрицу с помощью выбранного генератора
-         */
-        void Fill();
 
         /**
          * @brief Выполнить задание

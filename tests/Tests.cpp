@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <cstddef>
-#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -178,43 +177,49 @@ TEST(Generators, IStreamGeneratorSupportsApprovedDefaultConstructor)
 TEST(MatrixFill, UsesGeneratorPolymorphically)
 {
     Matrix<int> matrix(2U, 2U);
-    const std::unique_ptr<Generator> generator = std::make_unique<ConstantGenerator>(6);
-    matrix.fill(*generator);
+    const ConstantGenerator generator(6);
+    const Generator& baseGenerator = generator;
+    matrix.fill(baseGenerator);
 
     EXPECT_EQ(matrix, makeMatrix(2U, 2U, "6 6 6 6"));
 }
 
-TEST(Exercise, FillChangesAggregatedSourceMatrix)
+TEST(Exercise, ConstructorFillsSourceMatrix)
 {
     Matrix<int> matrix(1U, 3U);
     const ConstantGenerator generator(9);
     Task1 task(matrix, generator);
-    task.Fill();
 
     EXPECT_EQ(matrix, makeMatrix(1U, 3U, "9 9 9"));
 }
 
 TEST(Task1, ReplacesOneMaximumInEachRow)
 {
-    Matrix<int> matrix = makeMatrix(3U, 3U, "3 7 1 5 -1 4 -8 -3 -5");
-    Task1 task(matrix, zeroGenerator);
+    Matrix<int> matrix(3U, 3U);
+    std::istringstream input("3 7 1 5 -1 4 -8 -3 -5");
+    const IStreamGenerator generator(input);
+    Task1 task(matrix, generator);
 
     EXPECT_EQ(task.Solve(), makeMatrix(3U, 3U, "3 0 1 0 -1 4 -8 0 -5"));
 }
 
 TEST(Task1, EqualMaximaUseFirstOccurrence)
 {
-    Matrix<int> matrix = makeMatrix(2U, 3U, "4 4 1 -2 -2 -5");
-    Task1 task(matrix, zeroGenerator);
+    Matrix<int> matrix(2U, 3U);
+    std::istringstream input("4 4 1 -2 -2 -5");
+    const IStreamGenerator generator(input);
+    Task1 task(matrix, generator);
 
     EXPECT_EQ(task.Solve(), makeMatrix(2U, 3U, "0 4 1 0 -2 -5"));
 }
 
 TEST(Task1, DoesNotChangeSourceMatrix)
 {
-    Matrix<int> matrix = makeMatrix(2U, 2U, "1 9 7 2");
+    Matrix<int> matrix(2U, 2U);
+    std::istringstream input("1 9 7 2");
+    const IStreamGenerator generator(input);
+    Task1 task(matrix, generator);
     const Matrix<int> original(matrix);
-    Task1 task(matrix, zeroGenerator);
     (void)task.Solve();
 
     EXPECT_EQ(matrix, original);
@@ -222,8 +227,10 @@ TEST(Task1, DoesNotChangeSourceMatrix)
 
 TEST(Task1, RepeatedSolveStartsFromOriginalMatrix)
 {
-    Matrix<int> matrix = makeMatrix(2U, 2U, "1 9 7 2");
-    Task1 task(matrix, zeroGenerator);
+    Matrix<int> matrix(2U, 2U);
+    std::istringstream input("1 9 7 2");
+    const IStreamGenerator generator(input);
+    Task1 task(matrix, generator);
     const Matrix<int> first = task.Solve();
     EXPECT_EQ(task.Solve(), first);
 }
@@ -242,36 +249,46 @@ TEST(Task1, SupportsEmptyAndZeroColumnMatrices)
 
 TEST(Task2, InsertsZeroRowsBeforeMatchingRows)
 {
-    Matrix<int> matrix = makeMatrix(4U, 2U, "3 1 2 2 -6 5 7 8");
-    Task2 task(matrix, zeroGenerator);
+    Matrix<int> matrix(4U, 2U);
+    std::istringstream input("3 1 2 2 -6 5 7 8");
+    const IStreamGenerator generator(input);
+    Task2 task(matrix, generator);
 
     EXPECT_EQ(task.Solve(), makeMatrix(6U, 2U, "0 0 3 1 2 2 0 0 -6 5 7 8"));
 }
 
 TEST(Task2, TreatsZeroAsDivisibleByThree)
 {
-    Matrix<int> matrix = makeMatrix(2U, 2U, "0 4 1 2");
-    Task2 task(matrix, zeroGenerator);
+    Matrix<int> matrix(2U, 2U);
+    std::istringstream input("0 4 1 2");
+    const IStreamGenerator generator(input);
+    Task2 task(matrix, generator);
 
     EXPECT_EQ(task.Solve(), makeMatrix(3U, 2U, "0 0 0 4 1 2"));
 }
 
 TEST(Task2, HandlesNoMatchesAndAllMatches)
 {
-    Matrix<int> noMatches = makeMatrix(2U, 2U, "1 2 5 6");
-    Task2 noMatchTask(noMatches, zeroGenerator);
+    Matrix<int> noMatches(2U, 2U);
+    std::istringstream noMatchInput("1 2 5 6");
+    const IStreamGenerator noMatchGenerator(noMatchInput);
+    Task2 noMatchTask(noMatches, noMatchGenerator);
     EXPECT_EQ(noMatchTask.Solve(), noMatches);
 
-    Matrix<int> allMatches = makeMatrix(2U, 2U, "3 1 6 2");
-    Task2 allMatchTask(allMatches, zeroGenerator);
+    Matrix<int> allMatches(2U, 2U);
+    std::istringstream allMatchInput("3 1 6 2");
+    const IStreamGenerator allMatchGenerator(allMatchInput);
+    Task2 allMatchTask(allMatches, allMatchGenerator);
     EXPECT_EQ(allMatchTask.Solve(), makeMatrix(4U, 2U, "0 0 3 1 0 0 6 2"));
 }
 
 TEST(Task2, DoesNotChangeSourceMatrix)
 {
-    Matrix<int> matrix = makeMatrix(2U, 2U, "3 1 2 2");
+    Matrix<int> matrix(2U, 2U);
+    std::istringstream input("3 1 2 2");
+    const IStreamGenerator generator(input);
+    Task2 task(matrix, generator);
     const Matrix<int> original(matrix);
-    Task2 task(matrix, zeroGenerator);
     (void)task.Solve();
 
     EXPECT_EQ(matrix, original);
@@ -279,8 +296,10 @@ TEST(Task2, DoesNotChangeSourceMatrix)
 
 TEST(Task2, RepeatedSolveDoesNotInsertRowsTwice)
 {
-    Matrix<int> matrix = makeMatrix(2U, 2U, "3 1 2 2");
-    Task2 task(matrix, zeroGenerator);
+    Matrix<int> matrix(2U, 2U);
+    std::istringstream input("3 1 2 2");
+    const IStreamGenerator generator(input);
+    Task2 task(matrix, generator);
     const Matrix<int> first = task.Solve();
     EXPECT_EQ(task.Solve(), first);
 }

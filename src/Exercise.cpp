@@ -3,12 +3,8 @@
 namespace miit::algebra
 {
     Exercise::Exercise(Matrix<int>& matrix, const Generator& generator)
-        : source_(matrix), generator_(generator)
+        : source_(matrix)
     {
-    }
-
-    void Exercise::Fill()
-    {
-        source_.fill(generator_);
+        source_.fill(generator);
     }
 }
