@@ -27,6 +27,11 @@ namespace miit::algebra
         std::vector<std::vector<T>> data_;
 
         /**
+         * @brief Количество строк матрицы
+         */
+        std::size_t rows_ = 0U;
+
+        /**
          * @brief Количество столбцов матрицы
          */
         std::size_t columns_ = 0U;
@@ -43,7 +48,7 @@ namespace miit::algebra
          * @param columns Количество столбцов
          */
         Matrix(const std::size_t rows, const std::size_t columns)
-            : data_(rows, std::vector<T>(columns)), columns_(columns)
+            : data_(rows, std::vector<T>(columns)), rows_(rows), columns_(columns)
         {
         }
 
@@ -61,6 +66,7 @@ namespace miit::algebra
             : data_(std::move(other.data_)), columns_(other.columns_)
         {
             other.data_.clear();
+            other.rows_ = 0U;
             other.columns_ = 0U;
         }
 
@@ -81,8 +87,10 @@ namespace miit::algebra
             if (this != &other)
             {
                 data_ = std::move(other.data_);
+                rows_ = other.rows_;
                 columns_ = other.columns_;
                 other.data_.clear();
+                other.rows_ = 0U;
                 other.columns_ = 0U;
             }
             return *this;
@@ -99,7 +107,7 @@ namespace miit::algebra
          */
         std::size_t rowsCount() const noexcept
         {
-            return data_.size();
+            return rows_;
         }
 
         /**
