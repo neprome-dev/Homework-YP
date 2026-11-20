@@ -28,6 +28,7 @@ enum FillMode
  * @brief Получить целое число
  * @param message Сообщение перед вводом
  * @return Введённое целое число
+ * @throw std::invalid_argument Указатель на сообщение равен nullptr или не введено целое число
  */
 int readInteger(const char* message);
 
@@ -35,6 +36,7 @@ int readInteger(const char* message);
  * @brief Получить положительный размер
  * @param message Сообщение перед вводом
  * @return Введённый положительный размер
+ * @throw std::invalid_argument Указатель на сообщение равен nullptr или не введено положительное целое число
  */
 std::size_t readPositiveSize(const char* message);
 
@@ -115,6 +117,10 @@ int main()
 
 int readInteger(const char* message)
 {
+    if (message == nullptr)
+    {
+        throw std::invalid_argument("Не указано сообщение для ввода");
+    }
     std::cout << message;
 
     int value = 0;
@@ -128,6 +134,10 @@ int readInteger(const char* message)
 
 std::size_t readPositiveSize(const char* message)
 {
+    if (message == nullptr)
+    {
+        throw std::invalid_argument("Не указано сообщение для ввода");
+    }
     const int value = readInteger(message);
     if (value <= 0)
     {
