@@ -35,10 +35,11 @@ TEST(KindergartenPerson, ProvidesDescriptionsThroughBaseType)
 {
     const Child child("Иванов Пётр Сергеевич", 2, Gender::Boy, "Звёздочки");
     const Educator educator("Соколова Анна Игоревна", 1);
-    const std::vector<const KindergartenPerson*> people{&child, &educator};
+    const KindergartenPerson& childPerson = child;
+    const KindergartenPerson& educatorPerson = educator;
 
-    EXPECT_NE(people[0]->getDescription().find(child.getFullName()), std::string::npos);
-    EXPECT_NE(people[1]->getDescription().find(educator.getFullName()), std::string::npos);
+    EXPECT_NE(childPerson.getDescription().find(child.getFullName()), std::string::npos);
+    EXPECT_NE(educatorPerson.getDescription().find(educator.getFullName()), std::string::npos);
 }
 
 TEST(Child, AcceptsBothAgeLimits)
