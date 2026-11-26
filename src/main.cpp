@@ -73,20 +73,16 @@ int main()
         const Kindergarten kindergarten = createKindergarten(
             firstGroup, secondGroup, firstEducator, secondEducator);
 
-        std::vector<const KindergartenPerson*> people;
-        for (const Child& child : kindergarten.getChildren())
+        std::cout << "Детский сад\n\nВоспитанники:\n";
+        for (const KindergartenPerson& child : kindergarten.getChildren())
         {
-            people.push_back(&child);
-        }
-        for (const Educator& educator : kindergarten.getEducators())
-        {
-            people.push_back(&educator);
+            std::cout << child.getDescription() << '\n';
         }
 
-        std::cout << "Детский сад\n\nДети и педагоги:\n";
-        for (const KindergartenPerson* const person : people)
+        std::cout << "\nПедагоги:\n";
+        for (const KindergartenPerson& educator : kindergarten.getEducators())
         {
-            std::cout << person->getDescription() << '\n';
+            std::cout << educator.getDescription() << '\n';
         }
 
         std::cout << "\n1. Дети группы «" << firstGroup << "»:\n";
