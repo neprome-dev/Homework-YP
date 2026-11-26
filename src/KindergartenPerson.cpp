@@ -13,8 +13,6 @@ namespace miit::kindergarten
         }
     }
 
-    KindergartenPerson::~KindergartenPerson() = default;
-
     const std::string& KindergartenPerson::getFullName() const noexcept
     {
         return fullName_;

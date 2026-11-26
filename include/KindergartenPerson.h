@@ -25,9 +25,9 @@ namespace miit::kindergarten
 
     public:
         /**
-         * @brief Уничтожить объект базового или производного класса
+         * @brief Виртуальный деструктор
          */
-        virtual ~KindergartenPerson();
+        virtual ~KindergartenPerson() = default;
 
         /**
          * @brief Получить полное имя

@@ -79,12 +79,6 @@ namespace miit::kindergarten
         void addActivity(const Activity& activity);
 
         /**
-         * @brief Получить названия всех зарегистрированных групп
-         * @return Список названий групп
-         */
-        const std::vector<std::string>& getGroupNames() const noexcept;
-
-        /**
          * @brief Получить список всех воспитанников
          * @return Список воспитанников
          */

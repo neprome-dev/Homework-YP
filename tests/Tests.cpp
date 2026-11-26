@@ -175,7 +175,6 @@ TEST(Kindergarten, RejectsInvalidGroupsChildrenAndEducators)
     EXPECT_THROW(kindergarten.addEducator(Educator("Петрова Ольга Сергеевна", 0)), std::invalid_argument);
     EXPECT_THROW(kindergarten.addEducator(Educator("Петрова Ольга Сергеевна", 1)), std::invalid_argument);
 
-    EXPECT_EQ(kindergarten.getGroupNames().size(), 3U);
     EXPECT_TRUE(kindergarten.getChildren().empty());
     EXPECT_EQ(kindergarten.getEducators().size(), 2U);
 }

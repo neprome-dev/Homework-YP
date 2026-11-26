@@ -59,7 +59,7 @@ std::string activityName(const ActivityType type);
 void printTime(const int minute);
 
 /**
- * @brief Точка входа в демонстрационную программу
+ * @brief Точка входа в программу
  * @return Ноль при успешном выполнении, иначе единица
  */
 int main()

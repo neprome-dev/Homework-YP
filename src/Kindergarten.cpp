@@ -99,11 +99,6 @@ namespace miit::kindergarten
         activities_.push_back(activity);
     }
 
-    const std::vector<std::string>& Kindergarten::getGroupNames() const noexcept
-    {
-        return groupNames_;
-    }
-
     const std::vector<Child>& Kindergarten::getChildren() const noexcept
     {
         return children_;
